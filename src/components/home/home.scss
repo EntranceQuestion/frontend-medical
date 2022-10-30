@@ -1,0 +1,96 @@
+.hidden {
+    visibility: hidden;
+}
+
+.correct {
+    color: #67cd56;
+
+    .select__answer {
+        background-color: #67cd56;
+    }
+}
+.incorrect {
+    color: #ff3002;
+    .select__answer {
+        background-color: #ff3002;
+    }
+}
+
+#HOME {
+    // background-color: red;
+    max-width: 780px;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5vw;
+    position: relative;
+
+    .question {
+        // background-color: blue;
+        font-weight: bold;
+        font-size: 20px;
+        margin-top: 10vh;
+    }
+    .option {
+        // background-color: yellow;
+        font-size: 16px;
+        margin-top: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        .option__item {
+            // background-color: pink;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+
+            .select__answer {
+                width: 1rem;
+                height: 1rem;
+                border: 1px solid #969696;
+                border-radius: 100%;
+            }
+            &:hover {
+                // color: #ff1265;
+            }
+        }
+    }
+    .message {
+        // background-color: pink;
+        // color: red;
+        margin-top: 5vh;
+        align-self: center;
+        font-size: 14px;
+        // visibility: hidden;
+    }
+    .reveal {
+        // background-color: gray;
+        color: #67cd56;
+        // visibility: hidden;
+        margin-top: 10px;
+        align-self: center;
+        border-bottom: 2px solid #67cd56;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .next__question {
+        margin-top: 10vh;
+        border: 1px solid #969696;
+        border-radius: 20px;
+        padding: 8px 28px;
+        align-self: center;
+        cursor: pointer;
+        // disable select
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &:hover {
+            // color: #ffffff;
+            // background-color: #ff1265;
+        }
+    }
+}

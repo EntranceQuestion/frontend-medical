@@ -1,0 +1,23 @@
+
+
+
+#NAVBAR {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #969696;
+
+    .logo__name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .theme__toggle {
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: 2rem;
+        font-size: 1.6rem;
+    }
+}
