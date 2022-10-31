@@ -130,6 +130,7 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
+        resetStates()
         fetchQuestionData().then((result) => {
             setModelQuestion(result);
         });
