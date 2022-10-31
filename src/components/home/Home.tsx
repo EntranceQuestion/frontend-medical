@@ -46,33 +46,26 @@ import "./home.scss";
 //     return randomNum;
 // };
 
+type FetchQuestionType = {
+    id: number;
+    question: string;
+    option_1: string;
+    option_2: string;
+    option_3: string;
+    option_4: string;
+    correct_option: number;
+};
+
 const Home = ({ themeMode }: any) => {
-    //
-     const fetchQuestionData = (): any => {
-        const requestOptions = { method: 'POST', headers: { 'cross-origin-opener-policy': 'same-origin', } };
-        axios
-            .get("http://apiofentrancequestion.entrancequestion.com", requestOptions)
-            .then((response) => {
-                console.log(response);
-                return response;
-            })
-            .catch((error) => {
-                console.log("error from fetch function");
-                // console.log(error);
-            });
+
+    const fetchQuestionData = async () => {
+        const result = await axios.get(
+            "http://apiofentrancequestion.entrancequestion.com"
+        );
+        return result.data;
     };
-    const [modelQuestion, setModelQuestion] = useState({
-        id: 1,
-        correctAnswer: 2,
-        question: "How to use this website",
-        answer: {
-            option1: "these are option",
-            option2:
-                "this is correct answer and clicking on it will make it green",
-            option3: "this is wrong answer",
-            option4: "click on reveal to get correct answer",
-        },
-    });
+
+    const [modelQuestion, setModelQuestion] = useState<any>({});
 
     const [statusMessage, setStatusMessage] = useState<string>("empty");
     const [feedbackMessage, setFeedbackMessage] = useState<string>("empty");
@@ -85,12 +78,9 @@ const Home = ({ themeMode }: any) => {
     const [option__item3, setOption__item3] = useState("option__item");
     const [option__item4, setOption__item4] = useState("option__item");
 
-    const getNewQuestion = () => {
-        setModelQuestion(fetchQuestionData());
-    };
 
     const revealAnswer = () => {
-        const opt = modelQuestion.correctAnswer;
+        const opt = modelQuestion.correct_option;
         if (opt === 1) setOption__item1("option__item correct");
         if (opt === 2) setOption__item2("option__item correct");
         if (opt === 3) setOption__item3("option__item correct");
@@ -107,7 +97,7 @@ const Home = ({ themeMode }: any) => {
     const checkUserAnswer = (opt: number) => {
         setStyleClass_message("visible");
         // if answer is correct
-        if (modelQuestion.correctAnswer === opt) {
+        if (modelQuestion.correct_option === opt) {
             setStyle_status({ color: "green" });
             setStatusMessage("correct answer. ");
             setFeedbackMessage("keep it up...");
@@ -128,8 +118,6 @@ const Home = ({ themeMode }: any) => {
             if (opt === 3) setOption__item3("option__item incorrect");
             if (opt === 4) setOption__item4("option__item incorrect");
         }
-
-        console.log(1);
     };
 
     const resetStates = () => {
@@ -141,10 +129,18 @@ const Home = ({ themeMode }: any) => {
         setOption__item4("option__item");
     };
 
+    const getNewQuestion = () => {
+        fetchQuestionData().then((result) => {
+            setModelQuestion(result);
+        });
+    };
+
     useEffect(() => {
-        fetchQuestionData();
+        fetchQuestionData().then((result) => {
+            setModelQuestion(result);
+        });
         resetStates();
-    }, [modelQuestion]);
+    }, []);
 
     return (
         <div id="HOME">
@@ -156,28 +152,28 @@ const Home = ({ themeMode }: any) => {
                     onClick={() => checkUserAnswer(1)}
                 >
                     <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.answer.option1}</div>
+                    <div className="answer">{modelQuestion.option_1}</div>
                 </div>
                 <div
                     className={option__item2}
                     onClick={() => checkUserAnswer(2)}
                 >
                     <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.answer.option2}</div>
+                    <div className="answer">{modelQuestion.option_2}</div>
                 </div>
                 <div
                     className={option__item3}
                     onClick={() => checkUserAnswer(3)}
                 >
                     <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.answer.option3}</div>
+                    <div className="answer">{modelQuestion.option_3}</div>
                 </div>
                 <div
                     className={option__item4}
                     onClick={() => checkUserAnswer(4)}
                 >
                     <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.answer.option4}</div>
+                    <div className="answer">{modelQuestion.option_4}</div>
                 </div>
             </div>
 
