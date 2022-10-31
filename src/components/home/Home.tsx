@@ -60,7 +60,7 @@ const Home = ({ themeMode }: any) => {
 
     const fetchQuestionData = async () => {
         const result = await axios.get(
-            "http://apiofentrancequestion.entrancequestion.com"
+            "https://apiofentrancequestion.entrancequestion.com"
         );
         return result.data;
     };
