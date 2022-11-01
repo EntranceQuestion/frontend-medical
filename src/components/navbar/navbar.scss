@@ -1,11 +1,8 @@
-
-
-
 #NAVBAR {
     height: 3rem;
     display: flex;
     align-items: center;
-    padding-bottom: 0.5rem;
+    // padding-bottom: 0.5rem;
     border-bottom: 1px solid #969696;
 
     .logo__name {
@@ -19,5 +16,13 @@
         margin-left: auto;
         margin-right: 2rem;
         font-size: 1.6rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #NAVBAR {
+        .logo__name {
+            margin-left: auto;
+        }
     }
 }
