@@ -150,12 +150,6 @@ const Home = ({ themeMode }: any) => {
     };
 
     useEffect(() => {
-        if (isInitialRender.current) {
-            //https://stackoverflow.com/a/61072832
-            // skip initial execution of useEffect
-            isInitialRender.current = false; // set it to false so subsequent changes of dependency arr will make useEffect to execute
-            return;
-        }
 
         let savedModelQuestions: any = cacheModelQuestions("get");
         const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
@@ -168,6 +162,13 @@ const Home = ({ themeMode }: any) => {
         fakeFetch().then(() => {
             savedModelQuestions = cacheModelQuestions("get");
             setModelQuestion(savedModelQuestions[0])
+
+            if (isInitialRender.current) {
+                //https://stackoverflow.com/a/61072832
+                // skip initial execution of useEffect
+                isInitialRender.current = false; // set it to false so subsequent changes of dependency arr will make useEffect to execute
+                return;
+            }
             savedModelQuestions.shift()
             cacheModelQuestions("save", savedModelQuestions)
         });
