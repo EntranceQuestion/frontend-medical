@@ -89,6 +89,7 @@ const Home = ({ themeMode }: any) => {
     const [newQuestion, setNewQuestion] = useState<boolean>(false);
 
     const [styleClass_message, setStyleClass_message] = useState("hidden");
+    const [styleClass_home, setStyleClass_home] = useState("show");
     const [styleClass_reveal, setStyleClass_reveal] = useState("hidden");
     const [style_status, setStyle_status] = useState({});
     const [option__item1, setOption__item1] = useState("option__item");
@@ -146,6 +147,7 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
+        setStyleClass_home("hidden")
         setNewQuestion(!newQuestion)
     };
 
@@ -162,6 +164,7 @@ const Home = ({ themeMode }: any) => {
         fakeFetch().then(() => {
             savedModelQuestions = cacheModelQuestions("get");
             setModelQuestion(savedModelQuestions[0])
+            setStyleClass_home("show")
 
             if (isInitialRender.current) {
                 //https://stackoverflow.com/a/61072832
@@ -178,9 +181,9 @@ const Home = ({ themeMode }: any) => {
 
     return (
         <div id="HOME">
-            <div className="question">{modelQuestion.question}</div>
+            <div className={`question ${styleClass_home}`}>{modelQuestion.question}</div>
 
-            <div className="option">
+            <div className={`option ${styleClass_home}`}>
                 <div
                     className={option__item1}
                     onClick={() => checkUserAnswer(1)}
@@ -211,14 +214,14 @@ const Home = ({ themeMode }: any) => {
                 </div>
             </div>
 
-            <div className={`message ${styleClass_message}`}>
+            <div className={`message ${styleClass_message} ${styleClass_home}`}>
                 <span className="msg__status" style={style_status}>
                     {statusMessage}
                 </span>
                 <span className="msg__feedback">{feedbackMessage}</span>
             </div>
             <div
-                className={`reveal ${styleClass_reveal}`}
+                className={`reveal ${styleClass_reveal} ${styleClass_home}`}
                 onClick={revealAnswer}
             >
                 Reveal answer
