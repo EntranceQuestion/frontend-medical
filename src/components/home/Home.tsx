@@ -111,7 +111,7 @@ const Home = ({ themeMode }: any) => {
             setModelQuestion({
                 id: 0,
                 question:
-                    "Network Error!!! OR This could be your(device's) first time on this website.",
+                    "opps!! Network Error!!!",
                 option_1: "please click on 'New question' button to REFRESH",
                 option_2: "please click on 'New question' button to REFRESH",
                 option_3: "please click on 'New question' button to REFRESH",
