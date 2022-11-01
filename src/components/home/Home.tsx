@@ -2,85 +2,30 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./home.scss";
 
-// const modelQuestions = [
-//     {
-//         id: "1",
-//         correctAnswer: 2,
-//         question: "What is science?",
-//         answer: {
-//             option1: "science is Commere",
-//             option2: "Science is the body of knowledge",
-//             option3: "JM Academy",
-//             option4: "Evergreen",
-//         },
-//     },
-//     {
-//         id: "2",
-//         correctAnswer: 3,
-//         question: "where is Nepal Avalance Academy",
-//         answer: {
-//             option1: "Siraha",
-//             option2: "Madar",
-//             option3: "Ramaul",
-//             option4: "Jaynagar",
-//         },
-//     },
-//     {
-//         id: "3",
-//         correctAnswer: 1,
-//         question: "who is Father of science",
-//         answer: {
-//             option1: "Albert Einstein",
-//             option2: "Newton",
-//             option3: "I don't know",
-//             option4: "please next question",
-//         },
-//     },
-// ];
-
-// const rnum = (): number => {
-//     let randomNum: number = Math.floor(Math.random() * 10);
-//     if (randomNum > 2) {
-//         return rnum();
-//     }
-//     return randomNum;
+// const fakeFetch = async () => {
+//     await axios.get("https://fakestoreapi.com/products/1");
 // };
 
-type FetchQuestionType = {
-    id: number;
-    question: string;
-    option_1: string;
-    option_2: string;
-    option_3: string;
-    option_4: string;
-    correct_option: number;
+const fetchQuestionData = async () => {
+    const result = await axios.get(
+        "https://apiofentrancequestion.entrancequestion.com"
+    );
+    return result.data;
+};
+
+const cacheModelQuestions = (type: string, value?: any) => {
+    if (type === "save") {
+        const jsonValue = JSON.stringify(value);
+        localStorage.setItem("model_questions", jsonValue);
+    }
+    if (type === "get") {
+        const savedModelQuestions: any =
+            localStorage.getItem("model_questions");
+        return JSON.parse(savedModelQuestions);
+    }
 };
 
 const Home = ({ themeMode }: any) => {
-    const fakeFetch = async () => {
-        const result = await axios.get(
-            "https://fakestoreapi.com/products/1"
-        );
-        return result.data;
-    };
-
-    const fetchQuestionData = async () => {
-        const result = await axios.get("https://apiofentrancequestion.entrancequestion.com");
-        return result.data;
-    };
-
-    const cacheModelQuestions = (type: string, value?: any) => {
-        if (type === "save") {
-            const jsonValue = JSON.stringify(value);
-            localStorage.setItem("cacheModelQuestions", jsonValue);
-        } else {
-            const savedModelQuestions: any = localStorage.getItem(
-                "cacheModelQuestions"
-            );
-            return JSON.parse(savedModelQuestions);
-        }
-    };
-
     const isInitialRender = useRef(true); // in react, when refs are changed component dont re-render
 
     const [modelQuestion, setModelQuestion] = useState<any>({});
@@ -147,41 +92,56 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
-        setStyleClass_home("hidden")
-        setNewQuestion(!newQuestion)
+        setStyleClass_home("hidden");
+        setNewQuestion(!newQuestion);
     };
 
-    useEffect(() => {
-
-        let savedModelQuestions: any = cacheModelQuestions("get");
+    const operationLocalStorage = () => {
+        const savedModelQuestions = cacheModelQuestions("get");
+        if (savedModelQuestions && savedModelQuestions.length > 0) {
+            console.log("--------------------");
+            console.log(savedModelQuestions);
+            console.log("--------------------");
+            setModelQuestion(savedModelQuestions[0]);
+            setStyleClass_home("show");
+            savedModelQuestions.shift();
+            cacheModelQuestions("save", savedModelQuestions);
+        } else {
+            setStyleClass_home("show");
+            setModelQuestion({
+                id: 0,
+                question:
+                    "Network Error!!! OR This could be your(device's) first time on this website.",
+                option_1: "please click on 'New question' button to REFRESH",
+                option_2: "please click on 'New question' button to REFRESH",
+                option_3: "please click on 'New question' button to REFRESH",
+                option_4: "please click on 'New question' button to REFRESH",
+                correct_option: 1,
+            });
+        }
+    };
+    const fetchIfNeed = () => {
+        const savedModelQuestions: any = cacheModelQuestions("get");
         const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
         if (qLen < 2) {
             fetchQuestionData().then((result) => {
+                console.log("----- fetching new questions -------");
                 cacheModelQuestions("save", result);
             });
         }
+    };
 
-        fakeFetch().then(() => {
-            savedModelQuestions = cacheModelQuestions("get");
-            setModelQuestion(savedModelQuestions[0])
-            setStyleClass_home("show")
-
-            if (isInitialRender.current) {
-                //https://stackoverflow.com/a/61072832
-                // skip initial execution of useEffect
-                isInitialRender.current = false; // set it to false so subsequent changes of dependency arr will make useEffect to execute
-                return;
-            }
-            savedModelQuestions.shift()
-            cacheModelQuestions("save", savedModelQuestions)
-        });
-
+    useEffect(() => {
+        fetchIfNeed();
+        operationLocalStorage();
         resetStates();
     }, [newQuestion]);
 
     return (
         <div id="HOME">
-            <div className={`question ${styleClass_home}`}>{modelQuestion.question}</div>
+            <div className={`question ${styleClass_home}`}>
+                {modelQuestion.question}
+            </div>
 
             <div className={`option ${styleClass_home}`}>
                 <div
