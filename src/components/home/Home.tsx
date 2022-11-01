@@ -159,12 +159,12 @@ const Home = ({ themeMode }: any) => {
 
         let savedModelQuestions: any = cacheModelQuestions("get");
         const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
-
-        if (!savedModelQuestions || qLen < 2) {
+        if (qLen < 2) {
             fetchQuestionData().then((result) => {
                 cacheModelQuestions("save", result);
             });
         }
+
         fakeFetch().then(() => {
             savedModelQuestions = cacheModelQuestions("get");
             setModelQuestion(savedModelQuestions[0])
