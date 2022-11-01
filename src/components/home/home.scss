@@ -65,10 +65,9 @@
             }
         }
 
-        //// not using for now
-        // .blink_me {
-        //     animation: blinker 0.5s linear 2;
-        // }
+        .blink_me {
+            animation: blinker 0.5s linear 2;
+        }
 
         @keyframes blinker {
             50% {
