@@ -92,7 +92,7 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
-        setStyleClass_home("hidden");
+        // setStyleClass_home("hidden");
         setNewQuestion(!newQuestion);
     };
 
@@ -103,11 +103,11 @@ const Home = ({ themeMode }: any) => {
             console.log(savedModelQuestions);
             console.log("--------------------");
             setModelQuestion(savedModelQuestions[0]);
-            setStyleClass_home("show");
+            // setStyleClass_home("show");
             savedModelQuestions.shift();
             cacheModelQuestions("save", savedModelQuestions);
         } else {
-            setStyleClass_home("show");
+            // setStyleClass_home("show");
             setModelQuestion({
                 id: 0,
                 question:
