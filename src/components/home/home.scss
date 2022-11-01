@@ -56,6 +56,16 @@
                 // color: #ff1265;
             }
         }
+
+        .blink_me {
+            animation: blinker 0.5s linear 2;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
     }
     .message {
         // background-color: pink;
@@ -90,7 +100,7 @@
 
         &:hover {
             // color: #ffffff;
-            // background-color: #ff1265;
+            background-color: #63ccf9;
         }
     }
 }

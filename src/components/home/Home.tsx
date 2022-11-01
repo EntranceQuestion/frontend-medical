@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./home.scss";
 
@@ -57,18 +57,36 @@ type FetchQuestionType = {
 };
 
 const Home = ({ themeMode }: any) => {
-
-    const fetchQuestionData = async () => {
+    const fakeFetch = async () => {
         const result = await axios.get(
-            "https://apiofentrancequestion.entrancequestion.com"
+            "https://fakestoreapi.com/products/1"
         );
         return result.data;
     };
 
-    const [modelQuestion, setModelQuestion] = useState<any>({});
+    const fetchQuestionData = async () => {
+        const result = await axios.get("https://apiofentrancequestion.entrancequestion.com");
+        return result.data;
+    };
 
+    const cacheModelQuestions = (type: string, value?: any) => {
+        if (type === "save") {
+            const jsonValue = JSON.stringify(value);
+            localStorage.setItem("cacheModelQuestions", jsonValue);
+        } else {
+            const savedModelQuestions: any = localStorage.getItem(
+                "cacheModelQuestions"
+            );
+            return JSON.parse(savedModelQuestions);
+        }
+    };
+
+    const isInitialRender = useRef(true); // in react, when refs are changed component dont re-render
+
+    const [modelQuestion, setModelQuestion] = useState<any>({});
     const [statusMessage, setStatusMessage] = useState<string>("empty");
     const [feedbackMessage, setFeedbackMessage] = useState<string>("empty");
+    const [newQuestion, setNewQuestion] = useState<boolean>(false);
 
     const [styleClass_message, setStyleClass_message] = useState("hidden");
     const [styleClass_reveal, setStyleClass_reveal] = useState("hidden");
@@ -78,15 +96,13 @@ const Home = ({ themeMode }: any) => {
     const [option__item3, setOption__item3] = useState("option__item");
     const [option__item4, setOption__item4] = useState("option__item");
 
-
     const revealAnswer = () => {
         const opt = modelQuestion.correct_option;
-        if (opt === 1) setOption__item1("option__item correct");
-        if (opt === 2) setOption__item2("option__item correct");
-        if (opt === 3) setOption__item3("option__item correct");
-        if (opt === 4) setOption__item4("option__item correct");
+        if (opt === 1) setOption__item1("option__item correct blink_me");
+        if (opt === 2) setOption__item2("option__item correct blink_me");
+        if (opt === 3) setOption__item3("option__item correct blink_me");
+        if (opt === 4) setOption__item4("option__item correct blink_me");
         setStyleClass_reveal("hidden");
-        console.log(themeMode);
         setStyle_status({
             color: themeMode === "night" ? "#ffffff" : "#000000",
         });
@@ -130,18 +146,34 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
-        resetStates()
-        fetchQuestionData().then((result) => {
-            setModelQuestion(result);
-        });
+        setNewQuestion(!newQuestion)
     };
 
     useEffect(() => {
-        fetchQuestionData().then((result) => {
-            setModelQuestion(result);
+        if (isInitialRender.current) {
+            //https://stackoverflow.com/a/61072832
+            // skip initial execution of useEffect
+            isInitialRender.current = false; // set it to false so subsequent changes of dependency arr will make useEffect to execute
+            return;
+        }
+
+        let savedModelQuestions: any = cacheModelQuestions("get");
+        const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
+
+        if (!savedModelQuestions || qLen < 2) {
+            fetchQuestionData().then((result) => {
+                cacheModelQuestions("save", result);
+            });
+        }
+        fakeFetch().then(() => {
+            savedModelQuestions = cacheModelQuestions("get");
+            setModelQuestion(savedModelQuestions[0])
+            savedModelQuestions.shift()
+            cacheModelQuestions("save", savedModelQuestions)
         });
+
         resetStates();
-    }, []);
+    }, [newQuestion]);
 
     return (
         <div id="HOME">
