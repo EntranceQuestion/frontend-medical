@@ -42,6 +42,7 @@
         .option__item {
             // height: 50px;
             // background-color: pink;
+            outline: none; // disable click feedback border
             display: flex;
             align-items: top;
             gap: 0.5rem;
@@ -49,6 +50,7 @@
 
             .select__answer {
                 // background-color: red;
+                outline: none; // disable click feedback border
                 min-width: 1rem;
                 min-height: 1rem;
                 max-width: 1rem;
@@ -85,6 +87,7 @@
     }
     .reveal {
         // background-color: gray;
+        outline: none; // disable click feedback border
         color: #67cd56;
         // visibility: hidden;
         margin-top: 10px;
@@ -94,6 +97,7 @@
         cursor: pointer;
     }
     .next__question {
+        outline: none; // disable click feedback border
         margin-top: 10vh;
         border: 1px solid #969696;
         border-radius: 20px;
