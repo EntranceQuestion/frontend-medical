@@ -1,10 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./home.scss";
-
-// const fakeFetch = async () => {
-//     await axios.get("https://fakestoreapi.com/products/1");
-// };
 
 const fetchQuestionData = async () => {
     const result = await axios.get(
@@ -26,15 +22,12 @@ const cacheModelQuestions = (type: string, value?: any) => {
 };
 
 const Home = ({ themeMode }: any) => {
-    const isInitialRender = useRef(true); // in react, when refs are changed component dont re-render
-
     const [modelQuestion, setModelQuestion] = useState<any>({});
     const [statusMessage, setStatusMessage] = useState<string>("empty");
     const [feedbackMessage, setFeedbackMessage] = useState<string>("empty");
     const [newQuestion, setNewQuestion] = useState<boolean>(false);
 
     const [styleClass_message, setStyleClass_message] = useState("hidden");
-    const [styleClass_home, setStyleClass_home] = useState("show");
     const [styleClass_reveal, setStyleClass_reveal] = useState("hidden");
     const [style_status, setStyle_status] = useState({});
     const [option__item1, setOption__item1] = useState("option__item");
@@ -92,7 +85,6 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
-        // setStyleClass_home("hidden");
         setNewQuestion(!newQuestion);
     };
 
@@ -100,15 +92,12 @@ const Home = ({ themeMode }: any) => {
         const savedModelQuestions = await cacheModelQuestions("get");
         if (savedModelQuestions && savedModelQuestions.length > 0) {
             setModelQuestion(savedModelQuestions[0]);
-            // setStyleClass_home("show");
             savedModelQuestions.shift();
             cacheModelQuestions("save", savedModelQuestions);
         } else {
-            // setStyleClass_home("show");
             setModelQuestion({
                 id: 0,
-                question:
-                    "opps!! Network Error!!!",
+                question: "opps!! Network Error!!!",
                 option_1: "please click on 'New question' button to REFRESH",
                 option_2: "please click on 'New question' button to REFRESH",
                 option_3: "please click on 'New question' button to REFRESH",
@@ -120,10 +109,14 @@ const Home = ({ themeMode }: any) => {
     const fetchIfNeed = async () => {
         const savedModelQuestions: any = await cacheModelQuestions("get");
         const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
-        if (qLen < 2) {
-            await fetchQuestionData().then((result) => {
-                cacheModelQuestions("save", result);
-            });
+        if (qLen < 1) {
+            try {
+                await fetchQuestionData().then((result) => {
+                    cacheModelQuestions("save", result);
+                });
+            } catch (error) {
+                operationLocalStorage()
+            }
         }
     };
 
@@ -131,17 +124,15 @@ const Home = ({ themeMode }: any) => {
         (async () => {
             await fetchIfNeed();
             await operationLocalStorage();
-        })()
+        })();
         resetStates();
     }, [newQuestion]);
 
     return (
         <div id="HOME">
-            <div className={`question ${styleClass_home}`}>
-                {modelQuestion.question}
-            </div>
+            <div className={`question`}>{modelQuestion.question}</div>
 
-            <div className={`option ${styleClass_home}`}>
+            <div className={`option`}>
                 <div
                     className={option__item1}
                     onClick={() => checkUserAnswer(1)}
@@ -172,14 +163,14 @@ const Home = ({ themeMode }: any) => {
                 </div>
             </div>
 
-            <div className={`message ${styleClass_message} ${styleClass_home}`}>
+            <div className={`message ${styleClass_message}`}>
                 <span className="msg__status" style={style_status}>
                     {statusMessage}
                 </span>
                 <span className="msg__feedback">{feedbackMessage}</span>
             </div>
             <div
-                className={`reveal ${styleClass_reveal} ${styleClass_home}`}
+                className={`reveal ${styleClass_reveal}`}
                 onClick={revealAnswer}
             >
                 Reveal answer

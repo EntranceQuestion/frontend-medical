@@ -17,12 +17,12 @@ const App: FC = () => {
 
     const dayMode = () => {
         document.body.style.backgroundColor = "#ffffff";
-        document.body.style.color = "#141414";
+        document.body.style.color = "#000000";
         setThemeMode("day");
         setStorageThemeMode("day");
     };
     const nightMode = () => {
-        document.body.style.backgroundColor = "#141414";
+        document.body.style.backgroundColor = "#000000";
         document.body.style.color = "#ffffff";
         setThemeMode("night");
         setStorageThemeMode("night");
