@@ -96,8 +96,8 @@ const Home = ({ themeMode }: any) => {
         setNewQuestion(!newQuestion);
     };
 
-    const operationLocalStorage = () => {
-        const savedModelQuestions = cacheModelQuestions("get");
+    const operationLocalStorage = async () => {
+        const savedModelQuestions = await cacheModelQuestions("get");
         if (savedModelQuestions && savedModelQuestions.length > 0) {
             setModelQuestion(savedModelQuestions[0]);
             // setStyleClass_home("show");
@@ -117,19 +117,21 @@ const Home = ({ themeMode }: any) => {
             });
         }
     };
-    const fetchIfNeed = () => {
-        const savedModelQuestions: any = cacheModelQuestions("get");
+    const fetchIfNeed = async () => {
+        const savedModelQuestions: any = await cacheModelQuestions("get");
         const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
         if (qLen < 2) {
-            fetchQuestionData().then((result) => {
+            await fetchQuestionData().then((result) => {
                 cacheModelQuestions("save", result);
             });
         }
     };
 
     useEffect(() => {
-        fetchIfNeed();
-        operationLocalStorage();
+        (async () => {
+            await fetchIfNeed();
+            await operationLocalStorage();
+        })()
         resetStates();
     }, [newQuestion]);
 
