@@ -10,6 +10,7 @@ body {
 
 #APP {
     // background-color: red;
+    outline: none; // disable click feedback border
     height: 100vh;
     display: grid;
     grid-template-rows: 1fr 15fr;
