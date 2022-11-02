@@ -94,7 +94,6 @@
         cursor: pointer;
     }
     .next__question {
-            outline: none !important;
         margin-top: 10vh;
         border: 1px solid #969696;
         border-radius: 20px;
@@ -107,12 +106,8 @@
         -ms-user-select: none;
         user-select: none;
 
-        &:focus {
-            outline: none !important;
-        }
         &:active {
             // color: #ffffff;
-            outline: none !important;
             background-color: #63ccf9;
         }
     }
