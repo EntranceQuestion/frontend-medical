@@ -107,10 +107,11 @@
         user-select: none;
 
         &:focus {
-            outline: none;
+            outline: none !important;
         }
         &:active {
             // color: #ffffff;
+            outline: none !important;
             background-color: #63ccf9;
         }
     }
