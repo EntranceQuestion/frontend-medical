@@ -99,9 +99,6 @@ const Home = ({ themeMode }: any) => {
     const operationLocalStorage = () => {
         const savedModelQuestions = cacheModelQuestions("get");
         if (savedModelQuestions && savedModelQuestions.length > 0) {
-            console.log("--------------------");
-            console.log(savedModelQuestions);
-            console.log("--------------------");
             setModelQuestion(savedModelQuestions[0]);
             // setStyleClass_home("show");
             savedModelQuestions.shift();
@@ -125,7 +122,6 @@ const Home = ({ themeMode }: any) => {
         const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
         if (qLen < 2) {
             fetchQuestionData().then((result) => {
-                console.log("----- fetching new questions -------");
                 cacheModelQuestions("save", result);
             });
         }
