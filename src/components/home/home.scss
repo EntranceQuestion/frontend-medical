@@ -96,15 +96,15 @@
 }
 
 .correct {
-    color: rgba(0, 255, 0, 0.8);
+    color: #48b96c;
 
     .select__answer {
-        background-color: rgba(0, 255, 0, 0.8);
+        background-color: #48b96c;
     }
 }
 .incorrect {
-    color: rgba(255, 0, 0, 0.6);
+    color: #ff6666;
     .select__answer {
-        background-color: rgba(255, 0, 0, 0.6);
+        background-color: #ff6666;
     }
 }

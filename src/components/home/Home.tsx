@@ -58,7 +58,7 @@ const Home = ({ themeMode }: any) => {
         setStyleClass_message("visible");
         // if answer is correct
         if (modelQuestion.correct_option === opt) {
-            setStyle_status({ color: "green" });
+            setStyle_status({ color: "#48b96c" });
             setStatusMessage("correct answer. ");
             setFeedbackMessage("keep it up...");
             setStyleClass_reveal("hidden");
