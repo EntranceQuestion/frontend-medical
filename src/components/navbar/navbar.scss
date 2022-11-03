@@ -1,9 +1,16 @@
+.nav__shadow-day {
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(102, 102, 102, 0.5);
+    box-shadow: 0px 0px 5px 0px rgba(102, 102, 102, 0.5);
+}
+.nav__shadow-night {
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(102, 102, 102, 0.5);
+    box-shadow: 0px 0px 5px 0px rgba(102, 102, 102, 0.5);
+}
+
 #NAVBAR {
     height: 3rem;
     display: flex;
     align-items: center;
-    // padding-bottom: 0.5rem;
-    border-bottom: 1px solid #969696;
 
     .logo__name {
         font-size: 20px;

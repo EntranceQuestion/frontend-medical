@@ -69,7 +69,7 @@ const Home = ({ themeMode }: any) => {
         }
         // if answer is incorrect
         else {
-            setStyle_status({ color: "red" });
+            setStyle_status({ color: "rgba(255, 0, 0, 0.6)" });
             setStatusMessage("wrong answer. ");
             setFeedbackMessage("try again...");
             setStyleClass_reveal("visible");
