@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button} from "@quarkd/quark-react";
+import { Button } from "@quarkd/quark-react";
 
 import axios from "axios";
 import "./home.scss";
@@ -29,10 +29,10 @@ const Home = ({ themeMode }: any) => {
     const [feedbackMessage, setFeedbackMessage] = useState<string>("empty");
     const [newQuestion, setNewQuestion] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [nextQuestionButtonContent, setNextQuestionButtonContent] =
-        useState("Next question");
+    const [nextButtonContent, setNextButtonContent] = useState("Next question");
 
     const [styleClass_message, setStyleClass_message] = useState("hidden");
+    const [styleClass_modelData, setStyleClass_modelData] = useState("hidden");
     const [styleClass_reveal, setStyleClass_reveal] = useState("hidden");
     const [style_status, setStyle_status] = useState({});
     const [option__item1, setOption__item1] = useState("option__item");
@@ -126,24 +126,25 @@ const Home = ({ themeMode }: any) => {
     };
     useEffect(() => {
         (async () => {
-            setNextQuestionButtonContent("");
+            setNextButtonContent("");
             setIsLoading(true);
+            setStyleClass_modelData("hidden");
             await fetchIfNeed();
             await operationLocalStorage();
-            setNextQuestionButtonContent("Next question");
+            setNextButtonContent("Next question");
             setIsLoading(false);
+            setStyleClass_modelData("visible");
         })();
         resetStates();
     }, [newQuestion]);
 
     return (
         <div id="HOME">
+            <div className={`question ${styleClass_modelData}`}>
+                {modelQuestion.question}
+            </div>
 
-
-
-            <div className={`question`}>{modelQuestion.question}</div>
-
-            <div className={`option`}>
+            <div className={`option ${styleClass_modelData}`}>
                 <div
                     className={option__item1}
                     onClick={() => checkUserAnswer(1)}
@@ -194,7 +195,7 @@ const Home = ({ themeMode }: any) => {
                 className="next__question"
                 onClick={getNewQuestion}
             >
-                {nextQuestionButtonContent}
+                {nextButtonContent}
             </Button>
         </div>
     );
