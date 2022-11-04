@@ -4,6 +4,26 @@ import { Button } from "@quarkd/quark-react";
 import axios from "axios";
 import "./home.scss";
 
+const randoUniqueList = () => {
+    // get unique and random list from 1 to 4 of length 4
+    let loop = true;
+    let randomArrayList: number[] = [];
+    let count = 0;
+    let min = Math.ceil(1);
+    let max = Math.floor(4);
+    while (loop) {
+        let result = Math.floor(Math.random() * (max - min + 1)) + min;
+        if (!randomArrayList.includes(result)) {
+            count = count + 1;
+            if (count == 4) {
+                loop = false;
+            }
+            randomArrayList.push(result);
+        }
+    }
+    return randomArrayList;
+};
+
 const fetchQuestionData = async () => {
     const result = await axios.get(
         "https://apiofentrancequestion.entrancequestion.com"
@@ -30,6 +50,7 @@ const Home = ({ themeMode }: any) => {
     const [newQuestion, setNewQuestion] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(true);
     const [nextButtonContent, setNextButtonContent] = useState("Next question");
+    const [options__list, setOptions__list] = useState(randoUniqueList());
 
     const [styleClass_message, setStyleClass_message] = useState("hidden");
     const [styleClass_modelData, setStyleClass_modelData] = useState("hidden");
@@ -94,6 +115,7 @@ const Home = ({ themeMode }: any) => {
     };
 
     const getNewQuestion = () => {
+        setOptions__list(randoUniqueList());
         setNewQuestion(!newQuestion);
     };
 
@@ -149,34 +171,36 @@ const Home = ({ themeMode }: any) => {
             </div>
 
             <div className={`option ${styleClass_modelData}`}>
-                <div
-                    className={`${option__item1} ${option__disable}`}
-                    onClick={() => checkUserAnswer(1)}
-                >
-                    <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.option_1}</div>
-                </div>
-                <div
-                    className={`${option__item2} ${option__disable}`}
-                    onClick={() => checkUserAnswer(2)}
-                >
-                    <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.option_2}</div>
-                </div>
-                <div
-                    className={`${option__item3} ${option__disable}`}
-                    onClick={() => checkUserAnswer(3)}
-                >
-                    <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.option_3}</div>
-                </div>
-                <div
-                    className={`${option__item4} ${option__disable}`}
-                    onClick={() => checkUserAnswer(4)}
-                >
-                    <div className="select__answer"> </div>
-                    <div className="answer">{modelQuestion.option_4}</div>
-                </div>
+                {options__list.map((option_num) => {
+                    //.making options random
+                    let option__item = option__item4
+                    let modelQuestionOption = modelQuestion.option_4
+                    if (option_num === 1) {
+                        option__item = option__item1
+                        modelQuestionOption = modelQuestion.option_1
+                    }
+                    if (option_num === 2) {
+                        option__item = option__item2
+                        modelQuestionOption = modelQuestion.option_2
+                    }
+                    if (option_num === 3) {
+                        option__item = option__item3
+                        modelQuestionOption = modelQuestion.option_3
+                    }
+                    return (
+                        <div key={option_num.toString()}>
+                            <div
+                                className={`${option__item} ${option__disable}`}
+                                onClick={() => checkUserAnswer(option_num)}
+                            >
+                                <div className="select__answer"> </div>
+                                <div className="answer">
+                                    {modelQuestionOption}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
 
             <div className={`message ${styleClass_message}`}>
