@@ -39,6 +39,7 @@ const Home = ({ themeMode }: any) => {
     const [option__item2, setOption__item2] = useState("option__item");
     const [option__item3, setOption__item3] = useState("option__item");
     const [option__item4, setOption__item4] = useState("option__item");
+    const [option__disable, setOption__disable] = useState("");
 
     const revealAnswer = () => {
         const opt = modelQuestion.correct_option;
@@ -52,12 +53,14 @@ const Home = ({ themeMode }: any) => {
         });
         setStatusMessage("now try next question");
         setFeedbackMessage("...");
+        setOption__disable("click__disable");
     };
 
     const checkUserAnswer = (opt: number) => {
         setStyleClass_message("visible");
         // if answer is correct
         if (modelQuestion.correct_option === opt) {
+            setOption__disable("click__disable");
             setStyle_status({ color: "#48b96c" });
             setStatusMessage("correct answer. ");
             setFeedbackMessage("keep it up...");
@@ -83,6 +86,7 @@ const Home = ({ themeMode }: any) => {
     const resetStates = () => {
         setStyleClass_reveal("hidden");
         setStyleClass_message("hidden");
+        setOption__disable("");
         setOption__item1("option__item");
         setOption__item2("option__item");
         setOption__item3("option__item");
@@ -146,28 +150,28 @@ const Home = ({ themeMode }: any) => {
 
             <div className={`option ${styleClass_modelData}`}>
                 <div
-                    className={option__item1}
+                    className={`${option__item1} ${option__disable}`}
                     onClick={() => checkUserAnswer(1)}
                 >
                     <div className="select__answer"> </div>
                     <div className="answer">{modelQuestion.option_1}</div>
                 </div>
                 <div
-                    className={option__item2}
+                    className={`${option__item2} ${option__disable}`}
                     onClick={() => checkUserAnswer(2)}
                 >
                     <div className="select__answer"> </div>
                     <div className="answer">{modelQuestion.option_2}</div>
                 </div>
                 <div
-                    className={option__item3}
+                    className={`${option__item3} ${option__disable}`}
                     onClick={() => checkUserAnswer(3)}
                 >
                     <div className="select__answer"> </div>
                     <div className="answer">{modelQuestion.option_3}</div>
                 </div>
                 <div
-                    className={option__item4}
+                    className={`${option__item4} ${option__disable}`}
                     onClick={() => checkUserAnswer(4)}
                 >
                     <div className="select__answer"> </div>

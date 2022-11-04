@@ -98,6 +98,11 @@
     }
 }
 
+.click__disable {
+    pointer-events: none;
+    cursor: default;
+}
+
 .hidden {
     visibility: hidden;
 }
