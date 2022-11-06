@@ -15,7 +15,7 @@ const randoUniqueList = () => {
         let result = Math.floor(Math.random() * (max - min + 1)) + min;
         if (!randomArrayList.includes(result)) {
             count = count + 1;
-            if (count == 4) {
+            if (count === 4) {
                 loop = false;
             }
             randomArrayList.push(result);
@@ -24,10 +24,26 @@ const randoUniqueList = () => {
     return randomArrayList;
 };
 
-const fetchQuestionData = async () => {
-    const result = await axios.get(
-        "https://apiofentrancequestion.entrancequestion.com"
-    );
+const fetchQuestionData = async (qIDs?: any) => {
+    // const url = "https://apiofentrancequestion.entrancequestion.com"
+    const url = "http://127.0.0.1:8000/";
+
+    // using POST method instead of get to keep record of solved questions
+    // const result = await axios.get(url);
+
+    console.log("----------- submit ids ------------");
+    console.log(qIDs)
+    console.log("-------------------------------------");
+
+    // const data = new FormData();
+    // data.append("solved_question_ids", qIDs);
+
+    const result = await axios({
+        method: "post",
+        url: url,
+        data:  qIDs,
+    });
+
     return result.data;
 };
 
@@ -41,6 +57,15 @@ const cacheModelQuestions = (type: string, value?: any) => {
             localStorage.getItem("model_questions");
         return JSON.parse(savedModelQuestions);
     }
+};
+
+// fuction to remember ids of solved questions
+const cacheSolvedQuestionIDs = (value: any) => {
+    // console.log("=========================")
+    // console.log(value)
+    // console.log("=========================")
+    const jsonValue = JSON.stringify(value);
+    localStorage.setItem("solved_question_ids", jsonValue);
 };
 
 const Home = ({ themeMode }: any) => {
@@ -76,6 +101,10 @@ const Home = ({ themeMode }: any) => {
         setFeedbackMessage("...");
         setOption__disable("click__disable");
     };
+
+    // console.log("--------------------------");
+    // console.log(localStorage.getItem("model_questions"));
+    // console.log("--------------------------");
 
     const checkUserAnswer = (opt: number) => {
         setStyleClass_message("visible");
@@ -121,8 +150,8 @@ const Home = ({ themeMode }: any) => {
 
     const operationLocalStorage = async () => {
         const savedModelQuestions = await cacheModelQuestions("get");
-        if (savedModelQuestions && savedModelQuestions.length > 0) {
-            setModelQuestion(savedModelQuestions[0]);
+        if (savedModelQuestions && savedModelQuestions.length > 1) {
+            setModelQuestion(savedModelQuestions[1]);
             savedModelQuestions.shift();
             cacheModelQuestions("save", savedModelQuestions);
         } else {
@@ -139,11 +168,19 @@ const Home = ({ themeMode }: any) => {
     };
     const fetchIfNeed = async () => {
         const savedModelQuestions: any = await cacheModelQuestions("get");
-        const qLen = savedModelQuestions ? savedModelQuestions.length : 0;
-        if (qLen < 1) {
+        const qLen = savedModelQuestions ? savedModelQuestions.length : 1;
+        if (qLen < 2) {
             try {
-                await fetchQuestionData().then((result) => {
+                const solved_question_ids = localStorage.getItem(
+                    "solved_question_ids"
+                );
+                console.log("----------- solved_question_ids ------------");
+                console.log(solved_question_ids)
+                console.log("-------------------------------------");
+
+                await fetchQuestionData(solved_question_ids).then((result) => {
                     cacheModelQuestions("save", result);
+                    cacheSolvedQuestionIDs(result[0]);
                 });
             } catch (error) {
                 operationLocalStorage();
@@ -173,19 +210,19 @@ const Home = ({ themeMode }: any) => {
             <div className={`option ${styleClass_modelData}`}>
                 {options__list.map((option_num) => {
                     //.making options random
-                    let option__item = option__item4
-                    let modelQuestionOption = modelQuestion.option_4
+                    let option__item = option__item4;
+                    let modelQuestionOption = modelQuestion.option_4;
                     if (option_num === 1) {
-                        option__item = option__item1
-                        modelQuestionOption = modelQuestion.option_1
+                        option__item = option__item1;
+                        modelQuestionOption = modelQuestion.option_1;
                     }
                     if (option_num === 2) {
-                        option__item = option__item2
-                        modelQuestionOption = modelQuestion.option_2
+                        option__item = option__item2;
+                        modelQuestionOption = modelQuestion.option_2;
                     }
                     if (option_num === 3) {
-                        option__item = option__item3
-                        modelQuestionOption = modelQuestion.option_3
+                        option__item = option__item3;
+                        modelQuestionOption = modelQuestion.option_3;
                     }
                     return (
                         <div key={option_num.toString()}>
