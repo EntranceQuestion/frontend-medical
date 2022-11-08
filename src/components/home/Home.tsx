@@ -25,14 +25,15 @@ const randoUniqueList = () => {
 };
 
 const fetchQuestionData = async (qIDs?: any) => {
-    const url = "https://apiofentrancequestion.entrancequestion.com"
+    // const url = "https://apiofentrancequestion.entrancequestion.com"
+    const url = "http://127.0.0.1:8000/"
 
     // using POST method instead of get to keep record of solved questions
     // const result = await axios.get(url);
 
-    console.log("----------- submit ids ------------");
-    console.log(qIDs)
-    console.log("-------------------------------------");
+    // console.log("----------- submit ids ------------");
+    // console.log(qIDs)
+    // console.log("-------------------------------------");
 
     // const data = new FormData();
     // data.append("solved_question_ids", qIDs);
@@ -173,9 +174,9 @@ const Home = ({ themeMode }: any) => {
                 const solved_question_ids = localStorage.getItem(
                     "solved_question_ids"
                 );
-                console.log("----------- solved_question_ids ------------");
-                console.log(solved_question_ids)
-                console.log("-------------------------------------");
+                // console.log("----------- solved_question_ids ------------");
+                // console.log(solved_question_ids)
+                // console.log("-------------------------------------");
 
                 await fetchQuestionData(solved_question_ids).then((result) => {
                     cacheModelQuestions("save", result);
