@@ -25,8 +25,8 @@ const randoUniqueList = () => {
 };
 
 const fetchQuestionData = async (qIDs?: any) => {
-    // const url = "https://apiofentrancequestion.entrancequestion.com"
-    const url = "http://127.0.0.1:8000/"
+    const url = "https://apiofentrancequestion.entrancequestion.com"
+    // const url = "http://127.0.0.1:8000/"
 
     // using POST method instead of get to keep record of solved questions
     // const result = await axios.get(url);
